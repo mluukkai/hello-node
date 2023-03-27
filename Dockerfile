@@ -14,4 +14,4 @@ CMD node index.js
 
 # docker build . -t mluukkai/hello-docker
 
-# docker run -p 8080:8080  mluukkai/hello-docker
+# docker run -p 8080:8080 mluukkai/hello-docker
