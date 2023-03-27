@@ -1,3 +1,10 @@
+name: Publish image to DH
+
+on:
+  push:
+    branches:
+      - main
+
   publish-docker-hub:
     name: Publish image to Docker Hub
     runs-on: ubuntu-latest
