@@ -1,4 +1,20 @@
 const express = require('express')
+const { Sequelize, QueryTypes } = require('sequelize')
+require('dotenv').config()
+
+const DB_URL = process.env.DATABASE_URL
+
+console.log('connecting to', DB_URL)
+
+const sequelize = new Sequelize(DB_URL, {
+  dialectOptions: {
+    ssl: {
+      require: true,
+      rejectUnauthorized: false
+    }
+  },
+})
+
 const app = express()
 
 let notes = [
@@ -23,7 +39,12 @@ app.get('/', (req, res) => {
   res.send('<h1>Hello OpenShift!</h1><p>redeployment works</p>')
 })
 
-app.get('/api/notes', (req, res) => {
+app.get('/api/old_notes', (req, res) => {
+  res.json(notes)
+})
+
+app.get('/api/notes', async (req, res) => {
+  const notes = await sequelize.query("SELECT * FROM notes", { type: QueryTypes.SELECT })
   res.json(notes)
 })
 
