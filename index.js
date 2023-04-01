@@ -1,10 +1,11 @@
 const express = require('express')
 const { Sequelize, QueryTypes } = require('sequelize')
 require('dotenv').config()
+const Todo = require('./model.js')
 
 const DB_URL = process.env.DATABASE_URL
 
-console.log('connecting to', DB_URL)
+console.log('connecting to psql', DB_URL)
 
 const sequelize = new Sequelize(DB_URL, {
   dialectOptions: {
@@ -41,6 +42,29 @@ app.get('/', (req, res) => {
 
 app.get('/api/old_notes', (req, res) => {
   res.json(notes)
+})
+
+app.get('/api/todos', (request, response) => {
+  Todo.find({}).then(notes => {
+    response.json(notes)
+  })
+})
+
+app.post('/api/todos', (request, response) => {
+  const { content, done } = request.body
+
+  if (content === undefined) {
+    return response.status(400).json({ error: 'content missing' })
+  }
+
+  const todo = new Todo({
+    content,
+    done: done || false,
+  })
+
+  todo.save().then(savedTodo => {
+    response.json(savedTodo)
+  })
 })
 
 app.get('/api/notes', async (req, res) => {
