@@ -3,6 +3,8 @@ const { Sequelize, QueryTypes } = require('sequelize')
 require('dotenv').config()
 const Todo = require('./model.js')
 
+app.use(express.json())
+
 const DB_URL = process.env.DATABASE_URL
 
 console.log('connecting to psql', DB_URL)
